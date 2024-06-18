@@ -8,7 +8,7 @@ const printerName = ( entityId: string | undefined ) => {
     }
 
     return entityId
-        .replace(/(_current_state|_print_progress)/, '')
+        .replace(/(_current_state|_print_progress|_hotbed_temperature)/, '')
         .replace('sensor.', '')
         .split("_")
         .map(s => s.charAt(0).toUpperCase() + s.substring(1))
@@ -24,7 +24,7 @@ const printerBase = ( entityId: string | undefined ) => {
     }
 
     return entityId
-        .replace(/(_current_state|_print_progress)/, '');
+        .replace(/(_current_state|_print_progress|_hotbed_temperature)/, '');
 
 }
 
@@ -32,7 +32,7 @@ const getPrinters = ( hass: HomeAssistant ) => {
 
     const printers = {};
     Object.keys( hass.states ).filter(
-        entityId => (/sensor\..*(_current_state|_print_progress)/g).test(entityId)
+        entityId => (/sensor\..*(_current_state|_print_progress|_hotbed_temperature)/g).test(entityId)
     ).map(
         entityId => {
 

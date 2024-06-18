@@ -29,6 +29,12 @@ import TimeStat from "./TimeStat";
 
  */
 
+const toTitleCase = (str: any) => {
+        return str.toLowerCase().split(' ').map((word: any) => {
+          return (word.charAt(0).toUpperCase() + word.slice(1));
+        }).join(' ');
+      }
+
 
 /**
  * Function to dynamically render a stat by determining what type of stat it is
@@ -44,19 +50,20 @@ const renderCondition = (
 
     const entity = (suffix: string) => getEntity(hass, `${config.base_entity}${suffix}`);
     const mqtt = config.use_mqtt;
+    const anycubic = (config.printer_type == 'Anycubic');
 
     switch (condition) {
         case ThreedyCondition.Status:
             return (
                 <Stat
                     name={"Status"}
-                    value={ entity( mqtt ? '_print_status' : '_current_state').state }
+                    value={ toTitleCase(entity( anycubic ? '_print_state' : mqtt ? '_print_status' : '_current_state').state) }
                 />
             )
         case ThreedyCondition.ETA:
             return (
                 <TimeStat
-                    timeEntity={ entity( mqtt ? '_print_time_left' : '_time_remaining' ) }
+                    timeEntity={ entity( anycubic ? '_project_time_remaining' : mqtt ? '_print_time_left' : '_time_remaining' ) }
                     condition={condition}
                     config={config}
                     direction={0}
@@ -65,7 +72,7 @@ const renderCondition = (
         case ThreedyCondition.Elapsed:
             return (
                 <TimeStat
-                    timeEntity={ entity( mqtt ? '_print_time' : '_time_elapsed' ) }
+                    timeEntity={ entity( anycubic ? '_project_time_elapsed' : mqtt ? '_print_time' : '_time_elapsed' ) }
                     condition={condition}
                     config={config}
                     direction={1}
@@ -75,7 +82,7 @@ const renderCondition = (
         case ThreedyCondition.Remaining:
             return (
                 <TimeStat
-                    timeEntity={ entity( mqtt ? '_print_time_left' : '_time_remaining' ) }
+                    timeEntity={ entity( anycubic ? '_project_time_remaining' : mqtt ? '_print_time_left' : '_time_remaining' ) }
                     condition={condition}
                     config={config}
                     direction={-1}
@@ -86,7 +93,7 @@ const renderCondition = (
             return (
                 <TemperatureStat
                     name={"Bed"}
-                    temperatureEntity={ entity( mqtt ? '_bed_temperature' : '_actual_bed_temp' ) }
+                    temperatureEntity={ entity( anycubic ? '_hotbed_temperature' : mqtt ? '_bed_temperature' : '_actual_bed_temp' ) }
                     config={config}
                 />
             )
@@ -95,7 +102,7 @@ const renderCondition = (
             return (
                 <TemperatureStat
                     name={"Hotend"}
-                    temperatureEntity={ entity( mqtt ? '_tool_0_temperature' : '_actual_tool0_temp' ) }
+                    temperatureEntity={ entity( anycubic ? '_nozzle_temperature' : mqtt ? '_tool_0_temperature' : '_actual_tool0_temp' ) }
                     config={config}
                 />
             )
@@ -133,7 +140,7 @@ const percentComplete = (
     hass: HomeAssistant,
     config: ThreedyConfig
 ) => {
-    return (hass.states[config.use_mqtt ? `${config.base_entity}_print_progress` : `${config.base_entity}_job_percentage`] || { state: -1.0 }).state;
+    return (hass.states[(config.printer_type == 'Anycubic') ? `${config.base_entity}_project_progress` : config.use_mqtt ? `${config.base_entity}_print_progress` : `${config.base_entity}_job_percentage`] || { state: -1.0 }).state;
 }
 
 export {

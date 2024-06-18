@@ -47,19 +47,22 @@ const Card = ({ }) => {
 
     const borderRadius = styles[theme] ? styles[theme].borderRadius : styles['Default'].borderRadius;
 
-    const state = (hass.states[config.use_mqtt ? `${config.base_entity}_print_status` : `${config.base_entity}_current_state`] || {state: 'unknown'}).state
+    const state =
+        (config.printer_type == 'Anycubic') ?
+            (hass.states[`${config.base_entity}_print_state`] || {state: 'unknown'}).state
+            : (hass.states[config.use_mqtt ? `${config.base_entity}_print_status` : `${config.base_entity}_current_state`] || {state: 'unknown'}).state
     const light_on = config.light_entity ? (hass.states[config.light_entity] || {state: 'off'}).state === 'on' : false;
 
     const neumorphicShadow = hass.themes.darkMode ? '-5px -5px 8px rgba(50, 50, 50,.2),5px 5px 8px rgba(0,0,0,.08)' : '-4px -4px 8px rgba(255,255,255,.5),5px 5px 8px rgba(0,0,0,.03)'
     const defaultShadow = 'var( --ha-card-box-shadow, 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) )'
 
-    const hidden = state !== 'Printing' && !hiddenOverride;
+    const hidden = state.toLowerCase() !== 'printing' && !hiddenOverride;
     const statusColor =
-        state === 'Printing' ?
+        state.toLowerCase() === 'printing' ?
             "#4caf50"
             : state === "unknown" ?
                 "#f44336"
-                : state === "Operational" ?
+                : (state === "Operational" || state.toLowerCase() === 'finished') ?
                     "#00bcd4"
                     : "#ffc107"
 

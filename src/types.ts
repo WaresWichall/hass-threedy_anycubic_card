@@ -1,4 +1,5 @@
 export enum ThreedyPrinter {
+    Anycubic = "Anycubic",
     I3 = "I3",
     Cantilever = "Cantilever"
 }

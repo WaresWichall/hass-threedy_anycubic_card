@@ -1,4 +1,6 @@
 node_modules/
 dist/bundle*
-dist/threedy-card*
+dist/*threedy-card*
 yarn-error.log
+.DS_Store
+package-lock.json

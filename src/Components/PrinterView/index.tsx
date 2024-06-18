@@ -2,6 +2,7 @@ import React, { useContext, useRef, useEffect } from 'react';
 import ThreedyContext from '../../Contexts/ThreedyContext';
 import Cantilever from '../../Printers/Cantilever';
 import Defaults from '../../Printers/Defaults';
+import Anycubic from '../../Printers/Anycubic';
 import I3 from '../../Printers/I3';
 
 import styles from './styles';
@@ -20,10 +21,12 @@ const PrinterView = ({ toggleVideo, hasCamera, style }) => {
         switch (config.printer_type) {
             case 'I3':
                 return I3
+            case 'Anycubic':
+                return Anycubic
             case 'Cantilever':
                 return Cantilever
             default:
-                return I3
+                return Anycubic
         }
 
     }
