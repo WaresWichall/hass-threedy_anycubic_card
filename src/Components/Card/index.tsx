@@ -6,6 +6,7 @@ import { FaRegLightbulb, FaLightbulb } from 'react-icons/fa';
 import ThreedyContext from '../../Contexts/ThreedyContext';
 import toggleEntity from '../../Utils/Toggle';
 
+import MulticolorView from '../MulticolorView';
 import PrinterView from '../PrinterView';
 import Stats from '../Stats';
 
@@ -51,6 +52,12 @@ const Card = ({ }) => {
         (config.printer_type == 'Anycubic') ?
             (hass.states[`${config.base_entity}_print_state`] || {state: 'unknown'}).state
             : (hass.states[config.use_mqtt ? `${config.base_entity}_print_status` : `${config.base_entity}_current_state`] || {state: 'unknown'}).state
+
+    const has_colorbox =
+        (config.printer_type == 'Anycubic') ?
+            (hass.states[`${config.base_entity}_multi_color_box_spools`] || {state: 'inactive'}).state === 'active'
+            : false;
+
     const light_on = config.light_entity ? (hass.states[config.light_entity] || {state: 'off'}).state === 'on' : false;
 
     const neumorphicShadow = hass.themes.darkMode ? '-5px -5px 8px rgba(50, 50, 50,.2),5px 5px 8px rgba(0,0,0,.08)' : '-4px -4px 8px rgba(255,255,255,.5),5px 5px 8px rgba(0,0,0,.03)'
@@ -166,6 +173,26 @@ const Card = ({ }) => {
                         <Stats showPercent={!vertical} />
                     </div>
                 </motion.div>
+
+                {
+                    has_colorbox ? (
+                        <motion.div
+                            style={{ ...styles.Content, flexDirection: vertical ? 'column' : 'row' }}
+                            animate={{ height: hidden ? 0.0 : 'auto', opacity: hidden ? 0.0 : 1.0, scale: hidden ? 0.0 : 1.0 }}
+                            transition={{ ease: "easeInOut", duration: 0.25 }}
+                        >
+                            <div
+                                style={{
+                                    ...styles.MulticolorSection,
+                                    width: '100%',
+                                    height: vertical ? 'auto' : '100%'
+                                }}
+                            >
+                                <MulticolorView />
+                            </div>
+                        </motion.div>
+                    ) : (null)
+                }
 
             </div>
 

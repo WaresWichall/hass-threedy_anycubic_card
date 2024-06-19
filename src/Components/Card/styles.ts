@@ -15,6 +15,10 @@ const styles = {
         boxSizing: 'border-box',
         padding: '0 16px 32px 16px'
     },
+    MulticolorSection: {
+        boxSizing: 'border-box',
+        padding: '5px 32px 5px 32px'
+    },
     Default: {
         borderRadius: 4,
         color: 'var(--primary-text-color)'
