@@ -17,7 +17,7 @@ const styles = {
         top: 0,
         left: 0,
         borderRadius: 8,
-        backgroundColor: '#777777',
+        backgroundColor: '#bbbbbb',
         position: 'absolute'
     },
 
@@ -45,14 +45,14 @@ const styles = {
         boxSizing: 'border-box',
         borderRadius: 8,
         position: 'absolute',
-        backgroundColor: '#999999',
+        backgroundColor: '#333333',
         height: 8,
     },
 
     XAxis: {
         position: 'absolute',
         borderRadius: 8,
-        backgroundColor: '#999999'
+        backgroundColor: '#aaaaaa'
     },
 
     Print: {
@@ -71,7 +71,7 @@ const styles = {
         position: 'relative'
     },
     Gantry: {
-        backgroundColor: "#cccccc",
+        backgroundColor: "#333333",
         borderRadius: 4,
         boxSizing: 'border-box',
         position: 'absolute'

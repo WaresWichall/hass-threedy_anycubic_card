@@ -10,28 +10,28 @@
             {
                 document.getElementsByTagName(tag)[0].hass = {
                     states: {
-                        'sensor.ender_3_v2_current_state' : {
+                        'sensor.anycubic_kobra_3_print_state' : {
                             state: "Printing"
                         },
-                        'sensor.ender_3_v2_job_percentage' : {
+                        'sensor.anycubic_kobra_3_project_progress' : {
                             state: 52.12
                         },
-                        'sensor.ender_3_v2_actual_tool0_temp' : {
+                        'sensor.anycubic_kobra_3_nozzle_temperature' : {
                             state: 214.7,
                             attributes: {
                                 unit_of_measurement: "°C"
                             }
                         },
-                        'sensor.ender_3_v2_actual_bed_temp' : {
+                        'sensor.anycubic_kobra_3_hotbed_temperature' : {
                             state: 65.1,
                             attributes: {
                                 unit_of_measurement: "°C"
                             }
                         },
-                        'sensor.ender_3_v2_time_elapsed' : {
+                        'sensor.anycubic_kobra_3_project_time_elapsed' : {
                             state: 37,
                         },
-                        'sensor.ender_3_v2_time_remaining' : {
+                        'sensor.anycubic_kobra_3_project_time_remaining' : {
                             state: 65,
                         },
                         'switch.ender': {
@@ -61,12 +61,12 @@
             {
                 document.getElementsByTagName(tag)[0].setConfig({
                     type: 'custom:threedy-card',
-                    base_entity: 'sensor.ender_3_v2',
-                    name: "Ender 3 v2",
+                    base_entity: 'sensor.anycubic_kobra_3',
+                    name: "Anycubic Kobra 3",
                     theme: "Neumorphic",
                     scale: 1,
                     temperature_unit: 'C',
-                    printer_type: 'I3',
+                    printer_type: 'Anycubic',
                     round_temperature: false,
                     use_24hr: true,
                     light_entity: 'switch.light',

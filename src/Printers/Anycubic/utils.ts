@@ -57,7 +57,7 @@ const getDimensions = (config, bounds, haScaleFactor) => {
     const N_T = E_H;
 
     const E_T = P_T - E_H - N_H;
-    const X_T = E_T + (E_H / 2) - (X_H / 2);
+    const X_T = E_T + (E_H * 0.7) - (X_H / 2);
 
     return {
         Scalable: {

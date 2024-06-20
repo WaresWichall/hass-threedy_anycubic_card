@@ -11,16 +11,16 @@ const Defaults = {
         },
         left: {
             width: 40,
-            height: 405,
+            height: 380,
         },
         right: {
             width: 40,
-            height: 405,
+            height: 380,
         },
 
         buildplate: {
-            maxWidth: 235,
-            maxHeight: 250,
+            maxWidth: 250,
+            maxHeight: 260,
             verticalOffset: 55,
         },
 
@@ -28,10 +28,10 @@ const Defaults = {
             stepper: true,
             width: 420,
             offsetLeft: -40,
-            height: 20,
+            height: 30,
             extruder: {
                 width: 60,
-                height: 60
+                height: 100
             }
         }
 
