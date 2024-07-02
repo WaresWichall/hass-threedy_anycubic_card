@@ -63,9 +63,9 @@ const Card = ({ }) => {
     const neumorphicShadow = hass.themes.darkMode ? '-5px -5px 8px rgba(50, 50, 50,.2),5px 5px 8px rgba(0,0,0,.08)' : '-4px -4px 8px rgba(255,255,255,.5),5px 5px 8px rgba(0,0,0,.03)'
     const defaultShadow = 'var( --ha-card-box-shadow, 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) )'
 
-    const hidden = state.toLowerCase() !== 'printing' && !hiddenOverride;
+    const hidden = (!(['printing', 'preheating'].includes(state.toLowerCase()))) && !hiddenOverride;
     const statusColor =
-        state.toLowerCase() === 'printing' ?
+        (['printing', 'preheating'].includes(state.toLowerCase())) ?
             "#4caf50"
             : state === "unknown" ?
                 "#f44336"

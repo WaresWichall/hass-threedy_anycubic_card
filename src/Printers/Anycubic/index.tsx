@@ -29,7 +29,7 @@ const Anycubic = ({ printerConfig }) => {
     });
 
 
-    const printing = (hass.states[`${config.base_entity}_print_state`] || { state: "unknown" }).state === 'printing';
+    const printing = ['printing', 'preheating'].includes((hass.states[`${config.base_entity}_print_state`] || { state: "unknown" }).state);
     const progress = (hass.states[`${config.base_entity}_project_progress`] || { state: 0 }).state / 100;
 
     const x = useMotionValue(0);
