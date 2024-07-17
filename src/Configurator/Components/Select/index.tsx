@@ -104,7 +104,7 @@ const Select: React.FC<SelectProps> = ({ options, placeholder, initial, onSelect
             >
                 {
                     Object.keys(options).map(key => (
-                        <Option onClick={() => selectOption(key)}>
+                        <Option key={key} onClick={() => selectOption(key)}>
                             { key }
                         </Option>
                     ))

@@ -56,6 +56,7 @@ const renderCondition = (
         case ThreedyCondition.Status:
             return (
                 <Stat
+                    key={"status"}
                     name={"Status"}
                     value={ toTitleCase(entity( anycubic ? '_print_state' : mqtt ? '_print_status' : '_current_state').state) }
                 />
@@ -63,6 +64,7 @@ const renderCondition = (
         case ThreedyCondition.ETA:
             return (
                 <TimeStat
+                    key={"eta"}
                     timeEntity={ entity( anycubic ? '_project_time_remaining' : mqtt ? '_print_time_left' : '_time_remaining' ) }
                     condition={condition}
                     config={config}
@@ -72,6 +74,7 @@ const renderCondition = (
         case ThreedyCondition.Elapsed:
             return (
                 <TimeStat
+                    key={"elapsed"}
                     timeEntity={ entity( anycubic ? '_project_time_elapsed' : mqtt ? '_print_time' : '_time_elapsed' ) }
                     condition={condition}
                     config={config}
@@ -82,6 +85,7 @@ const renderCondition = (
         case ThreedyCondition.Remaining:
             return (
                 <TimeStat
+                    key={"remaining"}
                     timeEntity={ entity( anycubic ? '_project_time_remaining' : mqtt ? '_print_time_left' : '_time_remaining' ) }
                     condition={condition}
                     config={config}
@@ -92,6 +96,7 @@ const renderCondition = (
         case ThreedyCondition.Bed:
             return (
                 <TemperatureStat
+                    key={"bed"}
                     name={"Bed"}
                     temperatureEntity={ entity( anycubic ? '_hotbed_temperature' : mqtt ? '_bed_temperature' : '_actual_bed_temp' ) }
                     config={config}
@@ -101,6 +106,7 @@ const renderCondition = (
         case ThreedyCondition.Hotend:
             return (
                 <TemperatureStat
+                    key={"hotend"}
                     name={"Hotend"}
                     temperatureEntity={ entity( anycubic ? '_nozzle_temperature' : mqtt ? '_tool_0_temperature' : '_actual_tool0_temp' ) }
                     config={config}
@@ -111,6 +117,7 @@ const renderCondition = (
         default:
             return (
                 <Stat
+                    key={"unknown"}
                     name={"Unknown"}
                     value={"<unknown>"}
                 />

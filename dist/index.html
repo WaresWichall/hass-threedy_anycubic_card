@@ -45,7 +45,7 @@
                                 access_token: 'ff'
                             },
                             test: true,
-                            testUrl: 'http://69.51.252.162:8081/?action=stream'
+                            testUrl: 'http://localhost:8081/?action=stream'
                         }
                     },
                     themes: {
@@ -79,6 +79,27 @@
                         "Elapsed",
                         "ETA",
                         "Remaining"
+                    ]
+                })
+            }
+
+            function setConfigMinimal(tag)
+            {
+                document.getElementsByTagName(tag)[0].setConfig({
+                    type: 'custom:threedy-card',
+                    base_entity: 'sensor.anycubic_kobra_3',
+                    name: "Anycubic Kobra 3",
+                    theme: "Neumorphic",
+                    scale: 1,
+                    temperature_unit: 'C',
+                    printer_type: 'Anycubic',
+                    round_temperature: false,
+                    use_24hr: true,
+                    light_entity: 'switch.light',
+                    camera_entity: "camera.test",
+                    font: 'Assistant',
+                    monitored: [
+                        "Status",
                     ]
                 })
             }

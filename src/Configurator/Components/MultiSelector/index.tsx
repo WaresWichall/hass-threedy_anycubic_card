@@ -127,7 +127,7 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({ items, initial = [], onCh
         <div style={{ ...styles.MultiSelector, height: stock.length * 56 }}>
             {
                 stock.map(
-                    item => <Item item={item} selected={selected} available={available} reorder={reorder} toggle={toggle} />
+                    item => <Item key={item} item={item} selected={selected} available={available} reorder={reorder} toggle={toggle} />
                 )
             }
         </div>

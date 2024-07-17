@@ -75,11 +75,12 @@ const Card = ({ }) => {
 
     return (
         <motion.div
-            animate={{ borderRadius: hidden ? borderRadius : borderRadius * 2 }}
+            animate={{}}
             transition={{ ease: "easeInOut", duration: 0.25 }}
             style={{
                 ...styles.Card,
                 ...styles[theme],
+                borderRadius: (hidden ? borderRadius * 1 : borderRadius * 2),
                 fontFamily: config.font || 'sans-serif',
                 boxShadow: theme === 'Neumorphic' ? neumorphicShadow : defaultShadow
             }}

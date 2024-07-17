@@ -41,8 +41,8 @@ const Camera = ({ visible, toggleVideo, cameraEntity }) => {
             <div
                 style={{
                     ...styles.Wrapper,
-                    background:
-                        isMJPG && !!cameraEntity ?
+                    backgroundImage:
+                        (visible && isMJPG && !!cameraEntity) ?
                             `url('${cameraEntity.test ?
                                 cameraEntity.testUrl : `${window.location.origin}/api/camera_proxy_stream/${cameraEntity.entity_id}?token=${cameraEntity.attributes.access_token}`}')`
 
@@ -55,7 +55,7 @@ const Camera = ({ visible, toggleVideo, cameraEntity }) => {
                 {
 
                     /* TODO: Implement M3U8 Streams. Though, needed? */
-                    !isMJPG ? (
+                    (visible && !isMJPG) ? (
                         <ReactPlayer
                             width={width}
                             height={height}

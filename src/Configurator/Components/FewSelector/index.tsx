@@ -16,6 +16,7 @@ const FewSelector = ({ options = {}, initial, onUpdate = (key, value) => {}}) =>
 
                 Object.keys(options).map( (key, index) => (
                         <motion.button
+                            key={Object.keys(options)[index]}
                             onClick={() => {
                                 let key = Object.keys(options)[index];
                                 setActive(index)
