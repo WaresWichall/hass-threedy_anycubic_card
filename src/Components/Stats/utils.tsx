@@ -48,7 +48,9 @@ const renderCondition = (
     condition: ThreedyCondition | string
 ) => {
 
-    const entity = (suffix: string) => getEntity(hass, `${config.base_entity}${suffix}`);
+    const entity = (suffix: string) => {
+        return getEntity(hass, `${config.base_entity}${suffix}`) || {state: 'unavailable', attributes: {}};
+    }
     const mqtt = config.use_mqtt;
     const anycubic = (config.printer_type == 'Anycubic');
 
