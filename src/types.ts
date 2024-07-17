@@ -61,6 +61,7 @@ export type ThreedyConfig = {
 
 import {
     HassEntities,
+    HassEntity,
 } from "home-assistant-js-websocket";
 
 export interface HomeAssistant {
@@ -68,3 +69,5 @@ export interface HomeAssistant {
     callService (domain: string, service: string, serviceData?: object, target?: any): Promise<any>;
     [propName: string] : any;
 }
+
+export type HassEntity = HassEntity;

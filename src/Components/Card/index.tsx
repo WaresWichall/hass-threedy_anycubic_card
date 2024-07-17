@@ -13,6 +13,7 @@ import Stats from '../Stats';
 import styles from './styles';
 import Camera from "../Camera";
 import {percentComplete} from "../Stats/utils";
+import {HassEntity} from '../types';
 
 
 const Card = ({ }) => {
@@ -36,8 +37,122 @@ const Card = ({ }) => {
         setShowVideo(!showVideo)
     } : () => {}
 
+    const [
+        cameraEntityId,
+        setCameraEntityId
+    ] = useState<string | undefined>(undefined);
 
-    const cameraEntity = config.camera_entity ? hass.states[config.camera_entity] || undefined : undefined;
+    const [
+        cameraEntityState,
+        setCameraEntityState
+    ] = useState<HassEntity | undefined>(undefined);
+
+    const [
+        lightEntityId,
+        setLightEntityId
+    ] = useState<string | undefined>(undefined);
+
+    const [
+        lightIsOn,
+        setLightIsOn
+    ] = useState<boolean>(false);
+
+    const [
+        hasColorbox,
+        setHasColorbox
+    ] = useState<boolean>(false);
+
+    const [
+        isHidden,
+        setIsHidden
+    ] = useState<boolean>(false);
+
+    const [
+        printStateEntityId,
+        setPrintStateEntityId
+    ] = useState<string>('');
+
+    const [
+        printStateString,
+        setPrintStateString
+    ] = useState<string>('unknown');
+
+    const [
+        colorBoxEntityId,
+        setColorBoxEntityId
+    ] = useState<string>('');
+
+    const [
+        statusColor,
+        setStatusColor
+    ] = useState<string>('#ffc107');
+
+    React.useEffect(() => {
+        setCameraEntityId(config.camera_entity);
+    }, [config.camera_entity]);
+
+    React.useEffect(() => {
+        setCameraEntityState(hass.states[cameraEntityId]);
+    }, [cameraEntityId, hass.states[cameraEntityId]]);
+
+    React.useEffect(() => {
+        setLightEntityId(config.light_entity);
+    }, [config.light_entity]);
+
+    React.useEffect(() => {
+        setLightIsOn(
+            lightEntityId ? (hass.states[lightEntityId] || {state: 'off'}).state === 'on' : false
+        );
+    }, [lightEntityId, hass.states[lightEntityId]]);
+
+    React.useEffect(() => {
+        setPrintStateEntityId(
+            (config.printer_type == 'Anycubic') ?
+                `${config.base_entity}_print_state`
+                : (config.use_mqtt ?
+                    `${config.base_entity}_print_status`
+                    : `${config.base_entity}_current_state`)
+        );
+    }, [config.base_entity, config.printer_type, config.use_mqtt]);
+
+    React.useEffect(() => {
+        setColorBoxEntityId(
+            `${config.base_entity}_multi_color_box_spools`
+        );
+    }, [config.base_entity]);
+
+    React.useEffect(() => {
+        setPrintStateString(
+            (hass.states[printStateEntityId] || {state: 'unknown'}).state
+        );
+    }, [printStateEntityId, hass.states[printStateEntityId]]);
+
+    React.useEffect(() => {
+        setHasColorbox(
+            (config.printer_type == 'Anycubic') ?
+                (hass.states[colorBoxEntityId] || {state: 'inactive'}).state === 'active'
+                : false
+        );
+    }, [config.printer_type, colorBoxEntityId, hass.states[colorBoxEntityId]]);
+
+    React.useEffect(() => {
+        setIsHidden(
+            (!(['printing', 'preheating'].includes(printStateString.toLowerCase()))) && !hiddenOverride
+        );
+    }, [printStateString, hiddenOverride]);
+
+    React.useEffect(() => {
+        setStatusColor(
+            (['printing', 'preheating'].includes(printStateString.toLowerCase())) ?
+                "#4caf50"
+                : printStateString === "unknown" ?
+                    "#f44336"
+                    : (printStateString === "Operational" || printStateString.toLowerCase() === 'finished') ?
+                        "#00bcd4"
+                        : "#ffc107"
+        );
+    }, [printStateString]);
+
 
 
     const theme = config.theme || 'Default';
@@ -48,30 +163,8 @@ const Card = ({ }) => {
 
     const borderRadius = styles[theme] ? styles[theme].borderRadius : styles['Default'].borderRadius;
 
-    const state =
-        (config.printer_type == 'Anycubic') ?
-            (hass.states[`${config.base_entity}_print_state`] || {state: 'unknown'}).state
-            : (hass.states[config.use_mqtt ? `${config.base_entity}_print_status` : `${config.base_entity}_current_state`] || {state: 'unknown'}).state
-
-    const has_colorbox =
-        (config.printer_type == 'Anycubic') ?
-            (hass.states[`${config.base_entity}_multi_color_box_spools`] || {state: 'inactive'}).state === 'active'
-            : false;
-
-    const light_on = config.light_entity ? (hass.states[config.light_entity] || {state: 'off'}).state === 'on' : false;
-
     const neumorphicShadow = hass.themes.darkMode ? '-5px -5px 8px rgba(50, 50, 50,.2),5px 5px 8px rgba(0,0,0,.08)' : '-4px -4px 8px rgba(255,255,255,.5),5px 5px 8px rgba(0,0,0,.03)'
     const defaultShadow = 'var( --ha-card-box-shadow, 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) )'
-
-    const hidden = (!(['printing', 'preheating'].includes(state.toLowerCase()))) && !hiddenOverride;
-    const statusColor =
-        (['printing', 'preheating'].includes(state.toLowerCase())) ?
-            "#4caf50"
-            : state === "unknown" ?
-                "#f44336"
-                : (state === "Operational" || state.toLowerCase() === 'finished') ?
-                    "#00bcd4"
-                    : "#ffc107"
 
     return (
         <motion.div
@@ -80,7 +173,7 @@ const Card = ({ }) => {
             style={{
                 ...styles.Card,
                 ...styles[theme],
-                borderRadius: (hidden ? borderRadius * 1 : borderRadius * 2),
+                borderRadius: (isHidden ? borderRadius * 1 : borderRadius * 2),
                 fontFamily: config.font || 'sans-serif',
                 boxShadow: theme === 'Neumorphic' ? neumorphicShadow : defaultShadow
             }}
@@ -131,7 +224,7 @@ const Card = ({ }) => {
                                 onClick={() => toggleEntity(hass, config.light_entity)}
                             >
                                 {
-                                    light_on ? <FaLightbulb /> : <FaRegLightbulb />
+                                    lightIsOn ? <FaLightbulb /> : <FaRegLightbulb />
                                 }
                             </button>
                         ) : (null)
@@ -147,7 +240,7 @@ const Card = ({ }) => {
 
                 <motion.div
                     style={{ ...styles.Content, flexDirection: vertical ? 'column' : 'row' }}
-                    animate={{ height: hidden ? 0.0 : 'auto', opacity: hidden ? 0.0 : 1.0, scale: hidden ? 0.0 : 1.0 }}
+                    animate={{ height: isHidden ? 0.0 : 'auto', opacity: isHidden ? 0.0 : 1.0, scale: isHidden ? 0.0 : 1.0 }}
                     transition={{ ease: "easeInOut", duration: 0.25 }}
                 >
                     <div style={{ ...styles.Section, width: vertical ? '100%' : '50%', height: vertical ? 'auto' : '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: vertical ? 64 : 16, paddingRight: vertical ? 64 : 16 }}>
@@ -176,10 +269,10 @@ const Card = ({ }) => {
                 </motion.div>
 
                 {
-                    has_colorbox ? (
+                    hasColorbox ? (
                         <motion.div
                             style={{ ...styles.Content, flexDirection: vertical ? 'column' : 'row' }}
-                            animate={{ height: hidden ? 0.0 : 'auto', opacity: hidden ? 0.0 : 1.0, scale: hidden ? 0.0 : 1.0 }}
+                            animate={{ height: isHidden ? 0.0 : 'auto', opacity: isHidden ? 0.0 : 1.0, scale: isHidden ? 0.0 : 1.0 }}
                             transition={{ ease: "easeInOut", duration: 0.25 }}
                         >
                             <div
@@ -198,11 +291,11 @@ const Card = ({ }) => {
             </div>
 
             {
-                cameraEntity ? (
+                cameraEntityState ? (
                     <Camera
                         visible={showVideo}
                         toggleVideo={() => setShowVideo(false)}
-                        cameraEntity={cameraEntity}
+                        cameraEntity={cameraEntityState}
                     />
                 ) : (null)
             }

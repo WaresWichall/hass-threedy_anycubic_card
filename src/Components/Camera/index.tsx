@@ -43,8 +43,8 @@ const Camera = ({ visible, toggleVideo, cameraEntity }) => {
                     ...styles.Wrapper,
                     backgroundImage:
                         (visible && isMJPG && !!cameraEntity) ?
-                            `url('${cameraEntity.test ?
-                                cameraEntity.testUrl : `${window.location.origin}/api/camera_proxy_stream/${cameraEntity.entity_id}?token=${cameraEntity.attributes.access_token}`}')`
+                            `url('${cameraEntity.attributes.test ?
+                                cameraEntity.attributes.testUrl : `${window.location.origin}/api/camera_proxy_stream/${cameraEntity.entity_id}?token=${cameraEntity.attributes.access_token}`}')`
 
                             : 'none',
                     backgroundSize: 'cover',
