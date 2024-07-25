@@ -50,7 +50,9 @@ const getTotalSeconds = (
     config: ThreedyConfig
 ) => { 
     let result;   
-    if(!config.use_mqtt){
+    if(config.printer_type == 'Anycubic'){
+        result = (parseInt(timeEntity.state) || 0) * 60;
+    } else if(!config.use_mqtt){
         result = parseInt(timeEntity.state) || 0;
     } else {
         if(timeEntity.state){
